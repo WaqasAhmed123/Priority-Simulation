@@ -16,6 +16,8 @@ class Customer {
 
 class PrioritySimulation {
   List<Customer> customers = [];
+
+  // check whether all customers have been served or not based on service time
   allCustomersServed() {
     for (var customer in customers) {
       if (customer.customerData["servedTime"] !=
@@ -46,9 +48,8 @@ class PrioritySimulation {
     num currentTime = 0;
     bool completed = false;
 
-    // Customer? nextCustomer;
-
-    while (completed == false) {
+    while (!completed) {
+      // select the next customer to be treated based on priority
       Customer? nextCustomer;
       for (var i = 0; i < customers.length; i++) {
         var customer = customers[i];
@@ -63,7 +64,6 @@ class PrioritySimulation {
       }
 
       if (nextCustomer != null) {
-        // Perform the necessary modifications directly on the customer object
         if (!nextCustomer.customerData.containsKey("startTime")) {
           nextCustomer.customerData["startTime"] = currentTime;
         }
@@ -73,30 +73,35 @@ class PrioritySimulation {
           nextCustomer.customerData["servedTime"] +=
               nextCustomer.customerData["serviceTime"];
           currentTime += nextCustomer.customerData["serviceTime"];
+          if (nextCustomer.customerData["servedTime"] ==
+              nextCustomer.customerData["serviceTime"]) {
+            nextCustomer.customerData["endTime"] = currentTime;
+          }
           continue;
         } else if (nextCustomer.customerData["priority"] == 2 &&
             nextCustomer.customerData["servedTime"] <
                 nextCustomer.customerData["serviceTime"]) {
-          // if (!nextCustomer.customerData.containsKey("startTime")) {
-          //   nextCustomer.customerData["startTime"] = currentTime;
-          // }
           nextCustomer.customerData["servedTime"]++;
           currentTime++;
+          if (nextCustomer.customerData["servedTime"] ==
+              nextCustomer.customerData["serviceTime"]) {
+            nextCustomer.customerData["endTime"] = currentTime;
+          }
           continue;
         } else if (nextCustomer.customerData["priority"] == 3 &&
             nextCustomer.customerData["servedTime"] <
                 nextCustomer.customerData["serviceTime"]) {
-          // if (!nextCustomer.customerData.containsKey("startTime")) {
-          //   nextCustomer.customerData["startTime"] = currentTime;
-          // }
           nextCustomer.customerData["servedTime"]++;
           currentTime++;
+          if (nextCustomer.customerData["servedTime"] ==
+              nextCustomer.customerData["serviceTime"]) {
+            nextCustomer.customerData["endTime"] = currentTime;
+          }
           continue;
         }
       }
 
       completed = allCustomersServed();
-      print("executing");
       currentTime++;
     }
     for (var customer in customers) {
@@ -109,23 +114,23 @@ void main() {
   List<Map<String, int>> data = [
     {
       'customer': 1,
-      // 'interarrival': 4,
+      'interarrival': 4,
       'serviceTime': 7,
       "servedTime": 0,
-      'priority': 2,
+      'priority': 3,
       "arrival": 0,
     },
     {
       'customer': 2,
-      // 'interarrival': 3,
+      'interarrival': 3,
       'serviceTime': 9,
       "servedTime": 0,
-      'priority': 3,
+      'priority': 2,
       "arrival": 2,
     },
     {
       'customer': 3,
-      // 'interarrival': 3,
+      'interarrival': 3,
       'serviceTime': 9,
       "servedTime": 0,
       'priority': 1,
@@ -134,8 +139,5 @@ void main() {
   ];
 
   var prioritySimulation = PrioritySimulation(data);
-  // prioritySimulation.customers.forEach((element) {
-  //   print(element.customerData);
-  // });
   prioritySimulation.simulate();
 }
