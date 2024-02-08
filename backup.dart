@@ -48,61 +48,100 @@ class PrioritySimulation {
 
     // Customer? nextCustomer;
 
-    while (completed == false) {
+    while (completed==false) {
       Customer? nextCustomer;
       for (var i = 0; i < customers.length; i++) {
         var customer = customers[i];
         if (customer.customerData["arrival"] <= currentTime &&
-            customer.customerData["servedTime"] <
-                customer.customerData["serviceTime"] &&
             (nextCustomer == null ||
                 customer.customerData["priority"] <
                     nextCustomer.customerData["priority"])) {
           nextCustomer = customer;
         }
       }
-
+      
       if (nextCustomer != null) {
         // Perform the necessary modifications directly on the customer object
-        if (!nextCustomer.customerData.containsKey("startTime")) {
-          nextCustomer.customerData["startTime"] = currentTime;
-        }
         if (nextCustomer.customerData["priority"] == 1 &&
             nextCustomer.customerData["servedTime"] <
                 nextCustomer.customerData["serviceTime"]) {
+          if (!nextCustomer.customerData.containsKey("startTime")) {
+            nextCustomer.customerData["startTime"] = currentTime;
+          }
           nextCustomer.customerData["servedTime"] +=
               nextCustomer.customerData["serviceTime"];
           currentTime += nextCustomer.customerData["serviceTime"];
-          continue;
         } else if (nextCustomer.customerData["priority"] == 2 &&
             nextCustomer.customerData["servedTime"] <
                 nextCustomer.customerData["serviceTime"]) {
-          // if (!nextCustomer.customerData.containsKey("startTime")) {
-          //   nextCustomer.customerData["startTime"] = currentTime;
-          // }
+          if (!nextCustomer.customerData.containsKey("startTime")) {
+            nextCustomer.customerData["startTime"] = currentTime;
+          }
           nextCustomer.customerData["servedTime"]++;
           currentTime++;
-          continue;
         } else if (nextCustomer.customerData["priority"] == 3 &&
             nextCustomer.customerData["servedTime"] <
                 nextCustomer.customerData["serviceTime"]) {
-          // if (!nextCustomer.customerData.containsKey("startTime")) {
-          //   nextCustomer.customerData["startTime"] = currentTime;
-          // }
+          if (!nextCustomer.customerData.containsKey("startTime")) {
+            nextCustomer.customerData["startTime"] = currentTime;
+          }
           nextCustomer.customerData["servedTime"]++;
           currentTime++;
-          continue;
         }
       }
 
       completed = allCustomersServed();
-      print("executing");
-      currentTime++;
     }
-    for (var customer in customers) {
+       for (var customer in customers) {
       print(customer.customerData);
     }
   }
+  //   while (completed == false) {
+  //     for (int i = 0; i < customers.length; i++) {
+  //       if (nextCustomer.customerData["priority"] == 1 &&
+  //           nextCustomer.customerData["servedTime"] <
+  //               nextCustomer.customerData["serviceTime"] &&
+  //           nextCustomer.customerData["arrival"] <= currentTime) {
+  //         if (!nextCustomer.customerData.containsKey("startTime")) {
+  //           nextCustomer.customerData["startTime"] = currentTime;
+  //         }
+  //         nextCustomer.customerData["servedTime"] +=
+  //             nextCustomer.customerData["serviceTime"];
+  //         currentTime += nextCustomer.customerData["serviceTime"];
+  //         break;
+  //       } else if (nextCustomer.customerData["priority"] == 2 &&
+  //           nextCustomer.customerData["servedTime"] <
+  //               nextCustomer.customerData["serviceTime"] &&
+  //           nextCustomer.customerData["arrival"] <= currentTime) {
+  //         if (!nextCustomer.customerData.containsKey("startTime")) {
+  //           nextCustomer.customerData["startTime"] = currentTime;
+  //         }
+  //         nextCustomer.customerData["servedTime"]++;
+  //         currentTime++;
+  //         break;
+  //       } else if (nextCustomer.customerData["priority"] == 3 &&
+  //           nextCustomer.customerData["servedTime"] <
+  //               nextCustomer.customerData["serviceTime"] &&
+  //           nextCustomer.customerData["arrival"] <= currentTime) {
+  //         if (!nextCustomer.customerData.containsKey("startTime")) {
+  //           nextCustomer.customerData["startTime"] = currentTime;
+  //         }
+  //         nextCustomer.customerData["servedTime"]++;
+  //         currentTime++;
+  //         break;
+  //       }
+  //     }
+  //     completed = allCustomersServed();
+  //     print("inner loop status");
+  //     for (var customer in customers) {
+  //       print(customer.customerData);
+  //     }
+  //     // currentTime++;
+  //   }
+  //   for (var customer in customers) {
+  //     print(customer.customerData);
+  //   }
+  // }
 }
 
 void main() {
