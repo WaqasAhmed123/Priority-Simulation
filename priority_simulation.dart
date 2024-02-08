@@ -20,7 +20,6 @@ class PrioritySimulation {
     for (var customer in customers) {
       if (customer.customerData["servedTime"] !=
           customer.customerData["serviceTime"]) {
-        // completed = false;
         return false;
       }
     }
@@ -44,52 +43,50 @@ class PrioritySimulation {
   }
 
   void simulate() {
-    // customers.sort((a, b) => b.customerData["priority"].compareTo(a.customerData["priority"])); // Sort customers by priority (highest first)
     num currentTime = 0;
     bool completed = false;
 
     while (completed == false) {
       for (int i = 0; i < customers.length; i++) {
         if (customers[i].customerData["priority"] == 1 &&
-            // customers[i].customerData["arrival"] == currentTime
-            // &&
             customers[i].customerData["servedTime"] <
-                customers[i].customerData["serviceTime"]) {
-          if (customers[i].customerData["arrival"] == null) {
-            customers[i].customerData["arrival"] = currentTime;
+                customers[i].customerData["serviceTime"] &&
+            customers[i].customerData["arrival"] <= currentTime) {
+          if (!customers[i].customerData.containsKey("startTime")) {
+            customers[i].customerData["startTime"] = currentTime;
           }
           customers[i].customerData["servedTime"] +=
               customers[i].customerData["serviceTime"];
           currentTime += customers[i].customerData["serviceTime"];
+          break;
         } else if (customers[i].customerData["priority"] == 2 &&
-            // customers[i].customerData["arrival"] == currentTime &&
             customers[i].customerData["servedTime"] <
-                customers[i].customerData["serviceTime"]) {
-          if (customers[i].customerData["arrival"] == null) {
-            customers[i].customerData["arrival"] = currentTime;
+                customers[i].customerData["serviceTime"] &&
+            customers[i].customerData["arrival"] <= currentTime) {
+          if (!customers[i].customerData.containsKey("startTime")) {
+            customers[i].customerData["startTime"] = currentTime;
           }
-          customers[i].customerData["servedTime"] += 1;
-          currentTime += 1;
+          customers[i].customerData["servedTime"]++;
+          currentTime++;
+          break;
         } else if (customers[i].customerData["priority"] == 3 &&
-            // customers[i].customerData["arrival"] == currentTime &&
             customers[i].customerData["servedTime"] <
-                customers[i].customerData["serviceTime"]) {
-          if (customers[i].customerData["arrival"] == null) {
-            customers[i].customerData["arrival"] = currentTime;
+                customers[i].customerData["serviceTime"] &&
+            customers[i].customerData["arrival"] <= currentTime) {
+          if (!customers[i].customerData.containsKey("startTime")) {
+            customers[i].customerData["startTime"] = currentTime;
           }
-          customers[i].customerData["servedTime"] += 1;
-          currentTime += 1;
+          customers[i].customerData["servedTime"]++;
+          currentTime++;
+          break;
         }
       }
-      // for (var customer in customers) {
-      //   if (customer.customerData["servedTime"] !=
-      //       customer.customerData["serviceTime"]) {
-      //     completed = false;
-      //     break;
-      //   }
-
-      // }
       completed = allCustomersServed();
+      print("inner loop status");
+      for (var customer in customers) {
+        print(customer.customerData);
+      }
+      // currentTime++;
     }
     for (var customer in customers) {
       print(customer.customerData);
@@ -101,27 +98,27 @@ void main() {
   List<Map<String, int>> data = [
     {
       'customer': 1,
-      'interarrival': 4,
+      // 'interarrival': 4,
       'serviceTime': 7,
+      "servedTime": 0,
       'priority': 2,
-      "arrival": 2,
-      "servedTime": 0
+      "arrival": 0,
     },
     {
       'customer': 2,
-      'interarrival': 3,
+      // 'interarrival': 3,
       'serviceTime': 9,
+      "servedTime": 0,
       'priority': 3,
       "arrival": 2,
-      "servedTime": 0
     },
     {
       'customer': 3,
-      'interarrival': 3,
+      // 'interarrival': 3,
       'serviceTime': 9,
+      "servedTime": 0,
       'priority': 1,
       "arrival": 3,
-      "servedTime": 0
     },
   ];
 
@@ -131,3 +128,5 @@ void main() {
   // });
   prioritySimulation.simulate();
 }
+
+
